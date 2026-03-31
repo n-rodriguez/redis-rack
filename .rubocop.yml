@@ -1,0 +1,18 @@
+---
+plugins:
+  - rubocop-minitest
+  - rubocop-performance
+  - rubocop-rake
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.7
+  Exclude:
+    - bin/*
+
+Metrics/MethodLength:
+  Max: 12
+
+Naming/FileName:
+  Exclude:
+    - lib/redis-rack.rb

@@ -8,12 +8,12 @@ Gem::Specification.new do |s|
   s.authors     = ['Luca Guidi']
   s.email       = ['me@lucaguidi.com']
   s.homepage    = 'http://redis-store.org/redis-rack'
-  s.summary     = %q{Redis Store for Rack}
-  s.description = %q{Redis Store for Rack applications}
+  s.summary     = 'Redis Store for Rack'
+  s.description = 'Redis Store for Rack applications'
   s.license     = 'MIT'
 
   s.files = Dir['README.md', 'MIT-LICENSE', 'CHANGELOG.md', 'lib/**/*.rb']
 
-  s.add_dependency 'redis-store',   ['< 2', '>= 1.2']
   s.add_dependency 'rack-session',  '>= 0.2.0'
+  s.add_dependency 'redis-store',   ['< 2', '>= 1.2']
 end

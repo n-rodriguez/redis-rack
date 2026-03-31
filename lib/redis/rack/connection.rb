@@ -10,11 +10,11 @@ class Redis
         @store = options[:redis_store]
         @pool = options[:pool]
 
-        if @pool && !@pool.is_a?(ConnectionPool)
-          raise ArgumentError, "pool must be an instance of ConnectionPool"
+        if @pool && !@pool.is_a?(ConnectionPool) # rubocop:disable Style/IfUnlessModifier
+          raise ArgumentError, 'pool must be an instance of ConnectionPool'
         end
 
-        if @store && !@store.is_a?(Redis::Store)
+        if @store && !@store.is_a?(Redis::Store) # rubocop:disable Style/GuardClause
           raise ArgumentError, "redis_store must be an instance of Redis::Store (currently #{@store.class.name})"
         end
       end
@@ -23,7 +23,7 @@ class Redis
         if pooled?
           pool.with(&block)
         else
-          block.call(store)
+          yield(store)
         end
       end
 
@@ -45,7 +45,7 @@ class Redis
         {
           size: @options[:pool_size],
           timeout: @options[:pool_timeout]
-        }.reject { |key, value| value.nil? }.to_h
+        }.compact.to_h
       end
 
       private

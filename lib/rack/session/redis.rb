@@ -2,7 +2,6 @@
 
 require 'rack/session/abstract/id'
 require 'redis-store'
-require 'thread'
 require 'redis/rack/connection'
 
 module Rack
@@ -11,7 +10,7 @@ module Rack
       attr_reader :mutex
 
       DEFAULT_OPTIONS = Abstract::ID::DEFAULT_OPTIONS.merge(
-        :redis_server => 'redis://127.0.0.1:6379/0/rack:session'
+        redis_server: 'redis://127.0.0.1:6379/0/rack:session'
       )
 
       def initialize(app, options = {})
@@ -23,12 +22,14 @@ module Rack
 
       def generate_unique_sid(session)
         return generate_sid if session.empty?
+
+        valid = [1, true]
         loop do
           sid = generate_sid
           first = with do |c|
             [*c.setnx(sid.private_id, session, @default_options.to_hash)].first
           end
-          break sid if [1, true].include?(first)
+          break sid if valid.include?(first)
         end
       end
 
@@ -37,7 +38,7 @@ module Rack
           [generate_sid, {}]
         else
           with_lock(req, [nil, {}]) do
-            unless sid and session = get_session_with_fallback(sid)
+            unless sid and (session = get_session_with_fallback(sid))
               session = {}
               sid = generate_unique_sid(session)
             end
@@ -67,13 +68,13 @@ module Rack
         @default_options.fetch(:threadsafe, true)
       end
 
-      def with_lock(req, default = nil)
+      def with_lock(_req, default = nil)
         @mutex.lock if threadsafe?
         yield
       rescue Errno::ECONNREFUSED
         if $VERBOSE
           warn "#{self} is unable to find Redis server."
-          warn $!.inspect
+          warn $!.inspect # rubocop:disable Style/SpecialGlobalVars
         end
         default
       ensure
