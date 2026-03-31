@@ -34,7 +34,7 @@ class Redis
       end
 
       def pool
-        @pool ||= ConnectionPool.new(pool_options) { build_store } if pooled?
+        @pool ||= build_pool if pooled?
       end
 
       def store
@@ -52,6 +52,14 @@ class Redis
 
       def build_store
         Redis::Store::Factory.create(@options[:redis_server])
+      end
+
+      def build_pool
+        if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('3.2.0')
+          ConnectionPool.new(**pool_options) { build_store }
+        else
+          ConnectionPool.new(pool_options) { build_store }
+        end
       end
     end
   end
