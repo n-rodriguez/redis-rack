@@ -5,7 +5,8 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'connection_pool'
-gem 'minitest', '~> 5'
+gem 'minitest'
+gem 'minitest-mock'
 gem 'mocha'
 gem 'rake'
 gem 'redis-store-testing', github: 'redis-store/testing'
