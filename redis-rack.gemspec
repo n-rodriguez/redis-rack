@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description = %q{Redis Store for Rack applications}
   s.license     = 'MIT'
 
-  s.files = `git ls-files`.split("\n")
+  s.files = Dir['README.md', 'MIT-LICENSE', 'CHANGELOG.md', 'lib/**/*.rb']
 
   s.add_dependency 'redis-store',   ['< 2', '>= 1.2']
   s.add_dependency 'rack-session',  '>= 0.2.0'
